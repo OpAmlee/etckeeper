@@ -1,0 +1,4 @@
+"current_name";"default_name"
+"31_uefi-firmware";"30_uefi-firmware"
+"32_hold_shift";"31_hold_shift"
+"01_grub-customizer_menu_color_helper";"6_grub-customizer_menu_color_helper"
