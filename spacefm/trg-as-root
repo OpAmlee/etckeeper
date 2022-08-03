@@ -5,5 +5,5 @@
 
 root_editor-s=sudoedit %F
 root_editor-b=1
-main_terminal-s=urxvt
+main_terminal-s=xterm
 main_terminal-b=2
