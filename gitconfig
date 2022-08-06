@@ -1,1 +1,5 @@
 #
+[user]
+	email = opadamlee@gmail.com
+[core]
+	editor = nvim~
