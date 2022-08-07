@@ -48,11 +48,10 @@ EnableAvatars=true
 FacesDir=/usr/share/sddm/faces
 
 # Font used in the greeter
-Font=Cantrell 11
+Font=BlexMono Nerd Font
 
 # Theme directory path
-ThemeDir=/usr/share/sddm/themes/archlinux-simplyblack
-
+ThemeDir=/usr/share/sddm/themes/urbanlifestyle
 
 [Users]
 # Default $PATH for logged in users
