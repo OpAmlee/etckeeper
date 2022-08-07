@@ -20,25 +20,11 @@ set -e
 prefix="/usr"
 exec_prefix="/usr"
 datarootdir="/usr/share"
-quick_boot="1"
 
 export TEXTDOMAIN=grub
 export TEXTDOMAINDIR="${datarootdir}/locale"
 
 . "$pkgdatadir/grub-mkconfig_lib"
-
-found_other_os=
-
-adjust_timeout () {
-  if [ "$quick_boot" = 1 ] && [ "x${found_other_os}" != "x" ]; then
-    cat << EOF
-set timeout_style=hidden
-if [ "\${timeout}" = 0 ]; then
-  set timeout=10
-fi
-EOF
-  fi
-}
 
 if [ "x${GRUB_DISABLE_OS_PROBER}" = "xtrue" ]; then
   grub_warn "$(gettext_printf "os-prober will not be executed to detect other bootable partitions.\nSystems on them will not be added to the GRUB boot configuration.\nCheck GRUB_DISABLE_OS_PROBER documentation entry.")"
@@ -59,7 +45,6 @@ if [ -z "${OSPROBED}" ] ; then
 fi
 
 osx_entry() {
-    found_other_os=1
     if [ x$2 = x32 ]; then
         # TRANSLATORS: it refers to kernel architecture (32-bit)
 	bitstr="$(gettext "(32-bit)")"
@@ -164,7 +149,6 @@ for OS in ${OSPROBED} ; do
   case ${BOOT} in
     chain)
 
-      found_other_os=1
 	  onstr="$(gettext_printf "(on %s)" "${DEVICE}")"
       cat << EOF
 menuentry '$(echo "${LONGNAME} $onstr" | grub_quote)' $CLASS --class os \$menuentry_id_option 'osprober-chain-$(grub_get_device_id "${DEVICE}")' {
@@ -195,7 +179,6 @@ EOF
     ;;
     efi)
 
-	found_other_os=1
 	EFIPATH=${DEVICE#*@}
 	DEVICE=${DEVICE%@*}
 	onstr="$(gettext_printf "(on %s)" "${DEVICE}")"
@@ -227,7 +210,7 @@ EOF
         LBOOT="`echo ${LINUX} | cut -d ':' -f 2`"
         LLABEL="`echo ${LINUX} | cut -d ':' -f 3 | tr '^' ' '`"
         LKERNEL="`echo ${LINUX} | cut -d ':' -f 4`"
-        LINITRD="`echo ${LINUX} | cut -d ':' -f 5`"
+        LINITRD="`echo ${LINUX} | cut -d ':' -f 5 | tr '^' ' '`"
         LPARAMS="`echo ${LINUX} | cut -d ':' -f 6- | tr '^' ' '`"
 
         if [ -z "${LLABEL}" ] ; then
@@ -239,7 +222,6 @@ EOF
 	  LINITRD="${LINITRD#/boot}"
 	fi
 
-	found_other_os=1
 	onstr="$(gettext_printf "(on %s)" "${DEVICE}")"
 	recovery_params="$(echo "${LPARAMS}" | grep single)" || true
 	counter=1
@@ -320,7 +302,6 @@ EOF
       fi
     ;;
     hurd)
-      found_other_os=1
       onstr="$(gettext_printf "(on %s)" "${DEVICE}")"
       cat << EOF
 menuentry '$(echo "${LONGNAME} $onstr" | grub_quote)' --class hurd --class gnu --class os \$menuentry_id_option 'osprober-gnuhurd-/boot/gnumach.gz-false-$(grub_get_device_id "${DEVICE}")' {
@@ -363,5 +344,3 @@ EOF
     ;;
   esac
 done
-
-adjust_timeout

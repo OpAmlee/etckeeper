@@ -20,8 +20,6 @@ set -e
 prefix="/usr"
 exec_prefix="/usr"
 datarootdir="/usr/share"
-quiet_boot="1"
-quick_boot="1"
 
 . "$pkgdatadir/grub-mkconfig_lib"
 
@@ -44,6 +42,10 @@ case ${GRUB_DEVICE} in
     GRUB_DEVICE=`losetup ${GRUB_DEVICE} | sed -e "s/^[^(]*(\([^)]\+\)).*/\1/"`
   ;;
 esac
+
+if [ "x${GRUB_CMDLINE_LINUX_RECOVERY}" = "x" ] ; then
+  GRUB_CMDLINE_LINUX_RECOVERY=single
+fi
 
 # Default to disabling partition uuid support to maintian compatibility with
 # older kernels.
@@ -93,10 +95,12 @@ linux_entry ()
   fi
   if [ x$type != xsimple ] ; then
       case $type in
-	  recovery)
-	      title="$(gettext_printf "%s, with Linux %s (recovery mode)" "${os}" "${version}")" ;;
+	  booster)
+	      title="$(gettext_printf "%s, with Linux %s (booster initramfs)" "${os}" "${version}")" ;;
 	  fallback)
 	      title="$(gettext_printf "%s, with Linux %s (fallback initramfs)" "${os}" "${version}")" ;;
+	  recovery)
+	      title="$(gettext_printf "%s, with Linux %s (recovery mode)" "${os}" "${version}")" ;;
 	  *)
 	      title="$(gettext_printf "%s, with Linux %s" "${os}" "${version}")" ;;
       esac
@@ -110,9 +114,6 @@ linux_entry ()
   else
       echo "menuentry '$(echo "$os" | grub_quote)' ${CLASS} \$menuentry_id_option 'gnulinux-simple-$boot_device_id' {" | sed "s/^/$submenu_indentation/"
   fi      
-  if [ "$quick_boot" = 1 ]; then
-      echo "	recordfail" | sed "s/^/$submenu_indentation/"
-  fi
   if [ x$type != xrecovery ] ; then
       save_default_entry | grub_add_tab
   fi
@@ -145,25 +146,22 @@ linux_entry ()
     fi
     printf '%s\n' "${prepare_boot_cache}" | sed "s/^/$submenu_indentation/"
   fi
-  if [ x"$quiet_boot" = x0 ] || [ x"$type" != xsimple ]; then
-    message="$(gettext_printf "Loading Linux %s ..." ${version})"
-    sed "s/^/$submenu_indentation/" << EOF
-	echo	'$(echo "$message" | grub_quote)'
-EOF
-  fi
+  message="$(gettext_printf "Loading Linux %s ..." ${version})"
   sed "s/^/$submenu_indentation/" << EOF
+	echo	'$(echo "$message" | grub_quote)'
 	linux	${rel_dirname}/${basename} root=${linux_root_device_thisversion} rw ${args}
 EOF
-  if test -n "${initrd}" -o -n "${initrd_extra}" ; then
+  if test -n "${initrd}" ; then
     # TRANSLATORS: ramdisk isn't identifier. Should be translated.
-    if [ x"$quiet_boot" = x0 ] || [ x"$type" != xsimple ]; then
-      message="$(gettext_printf "Loading initial ramdisk ...")"
-      printf ' %s\n' "echo     '$(echo "$message" | grub_quote)'" | sed "s/^/$submenu_indentation/"
-    fi
-    printf '	%s ' 'initrd' | sed "s/^/$submenu_indentation/"
-    for i in ${initrd_extra} ${initrd}; do
-	printf ' %s/%s' "${rel_dirname}" "${i}"
-     done
+    message="$(gettext_printf "Loading initial ramdisk ...")"
+    initrd_path=
+    for i in ${initrd}; do
+      initrd_path="${initrd_path} ${rel_dirname}/${i}"
+    done
+    sed "s/^/$submenu_indentation/" << EOF
+	echo	'$(echo "$message" | grub_quote)'
+	initrd	$(echo $initrd_path)
+EOF
   fi
   sed "s/^/$submenu_indentation/" << EOF
 }
@@ -221,8 +219,10 @@ while [ "x$list" != "x" ] ; do
   done
 
   initrd_real=
-  for i in "initrd.img-${version}" "initrd-${version}.img" "initrd-${version}.gz" \
-	   "initrd-${version}" "initramfs-${version}.img" \
+  for i in "initrd.img-${version}" "initrd-${version}.img" \
+	   "initrd-${alt_version}.img.old" "initrd-${version}.gz" \
+	   "initrd-${alt_version}.gz.old" "initrd-${version}" \
+	   "initramfs-${version}.img" "initramfs-${alt_version}.img.old" \
 	   "initrd.img-${alt_version}" "initrd-${alt_version}.img" \
 	   "initrd-${alt_version}" "initramfs-${alt_version}.img" \
 	   "initramfs-genkernel-${version}" \
@@ -238,14 +238,13 @@ while [ "x$list" != "x" ] ; do
   initrd=
   if test -n "${initrd_early}" || test -n "${initrd_real}"; then
     initrd="${initrd_early} ${initrd_real}"
-  fi
 
-  initrd_extra=
-  for i in intel-ucode.img; do
-    if test -e "${dirname}/${i}" ; then
-      initrd_extra="${initrd_extra} ${i}"
-    fi
-  done
+    initrd_display=
+    for i in ${initrd}; do
+      initrd_display="${initrd_display} ${dirname}/${i}"
+    done
+    gettext_printf "Found initrd image: %s\n" "$(echo $initrd_display)" >&2
+  fi
 
   config=
   for i in "${dirname}/config-${version}" "${dirname}/config-${alt_version}" "/etc/kernels/kernel-config-${version}" ; do
@@ -260,9 +259,7 @@ while [ "x$list" != "x" ] ; do
       initramfs=`grep CONFIG_INITRAMFS_SOURCE= "${config}" | cut -f2 -d= | tr -d \"`
   fi
 
-  if test -n "${initrd}" -o -n "${initrd_extra}" ; then
-    gettext_printf "Found initrd image(s) in %s:%s\n" "${dirname}" "${initrd_extra} ${initrd}" >&2
-  elif test -z "${initramfs}" && test -z "${initrd_real}" ; then
+  if test -z "${initramfs}" && test -z "${initrd_real}" ; then
     # "UUID=" and "ZFS=" magic is parsed by initrd or initramfs.  Since there's
     # no initrd or builtin initramfs, it can't work here.
     if [ "x${GRUB_DEVICE_PARTUUID}" = "x" ] \
@@ -300,7 +297,7 @@ while [ "x$list" != "x" ] ; do
               "${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_LINUX_DEFAULT}"
 
   if test -e "${dirname}/initramfs-${version}-fallback.img" ; then
-    initrd="initramfs-${version}-fallback.img"
+    initrd="${initrd_early} initramfs-${version}-fallback.img"
 
     if test -n "${initrd}" ; then
       gettext_printf "Found fallback initrd image(s) in %s:%s\n" "${dirname}" "${initrd_extra} ${initrd}" >&2
@@ -310,9 +307,20 @@ while [ "x$list" != "x" ] ; do
                 "${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_LINUX_DEFAULT}"
   fi
 
+  if test -e "${dirname}/booster-${version}.img" ; then
+    initrd="${initrd_early} booster-${version}.img"
+
+    if test -n "${initrd}" ; then
+      gettext_printf "Found booster initrd image(s) in %s:%s\n" "${dirname}" "${initrd_extra} ${initrd}" >&2
+    fi
+
+    linux_entry "${OS}" "${version}" booster \
+                "${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_LINUX_DEFAULT}"
+  fi
+
   if [ "x${GRUB_DISABLE_RECOVERY}" != "xtrue" ]; then
     linux_entry "${OS}" "${version}" recovery \
-                "single ${GRUB_CMDLINE_LINUX}"
+                "${GRUB_CMDLINE_LINUX_RECOVERY} ${GRUB_CMDLINE_LINUX}"
   fi
 
   list=`echo $list | tr ' ' '\n' | fgrep -vx "$linux" | tr '\n' ' '`
