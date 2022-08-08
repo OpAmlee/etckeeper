@@ -12,3 +12,8 @@
 127.0.0.1          localhost
 ::1                localhost
 127.0.0.1          arch28.localdomain       arch28
+
+
+127.0.0.1          localhost
+::1                localhost
+127.0.0.1          arch.localdomain       arch
