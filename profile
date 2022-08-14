@@ -55,3 +55,6 @@ if [[ $UID -ge 1000 && -d $HOME/bin && -z $(echo $PATH | grep -o $HOME/bin) ]]
 then
     export PATH="${PATH}:$HOME/bin"
 fi
+
+
+export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
