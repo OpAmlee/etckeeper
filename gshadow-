@@ -60,3 +60,5 @@ lightdm:!*::trg
 sddm:!*::
 dhcpcd:!*::
 incron:!*::
+lxdm:!*::
+adam:!::
