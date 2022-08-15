@@ -60,3 +60,4 @@ lightdm:x:968:trg
 sddm:x:967:
 dhcpcd:x:966:
 incron:x:969:
+lxdm:x:965:
