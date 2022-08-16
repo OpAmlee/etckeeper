@@ -18,7 +18,6 @@ polkitd:x:102:102:PolicyKit daemon:/:/usr/bin/nologin
 rtkit:x:133:133:RealtimeKit:/proc:/usr/bin/nologin
 avahi:x:974:974:Avahi mDNS/DNS-SD daemon:/:/usr/bin/nologin
 git:x:973:973:git daemon user:/:/usr/bin/git-shell
-trg:x:1000:1000::/home/trg:/bin/bash
 dnsmasq:x:972:972:dnsmasq daemon:/:/usr/bin/nologin
 usbmux:x:140:140:usbmux user:/:/usr/bin/nologin
 cups:x:209:209:cups helper user:/:/usr/bin/nologin
@@ -28,3 +27,4 @@ sddm:x:967:967:Simple Desktop Display Manager:/var/lib/sddm:/usr/bin/nologin
 dhcpcd:x:966:966:dhcpcd privilege separation:/:/usr/bin/nologin
 incron:x:969:969:Incron system:/var/spool/incron:/usr/bin/nologin
 lxdm:x:965:965:Lightweight X11 Display Manager:/var/lib/lxdm:/usr/bin/nologin
+adam:x:1001:1001::/home/trg:/bin/bash

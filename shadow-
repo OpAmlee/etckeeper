@@ -18,7 +18,6 @@ polkitd:!*:19156::::::
 rtkit:!*:19156::::::
 avahi:!*:19156::::::
 git:!*:19156::::::
-trg:$6$O2N6bMsP3LO0.D7W$BwHJNiJdDet6wKb45jPGVpbhtIbpQKOvTiXcOnvGseEBwKe7zrBJ5uEt4jVAk86CDp52Tu1qLY92oZ1kUKGZ21:19156:0:99999:7:::
 dnsmasq:!*:19156::::::
 usbmux:!*:19157::::::
 cups:!*:19157::::::
@@ -27,4 +26,4 @@ lightdm:!*:19176::::::
 sddm:!*:19176::::::
 dhcpcd:!*:19185::::::
 incron:!*:19199::::::
-lxdm:!*:19219::::::
+adam:$6$lxHEBJgCQUhiPp6.$JaOKIEd3s9kwJfAaL/wXCSKr.ZihbIGEQK/r0yQ9K.wGJF9qF3qQxydCubUiTwvRqnbzN2uVYPFi5zzb/JDSM1:19220::::::
