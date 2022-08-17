@@ -48,7 +48,6 @@ polkitd:x:102:
 rtkit:x:133:
 avahi:x:974:
 git:x:973:
-trg:x:1000:
 dnsmasq:x:972:
 i2c:x:971:
 usbmux:x:140:
@@ -61,4 +60,3 @@ sddm:x:967:adam
 dhcpcd:x:966:
 incron:x:969:
 lxdm:x:965:
-adam:x:1001:
