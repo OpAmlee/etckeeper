@@ -13,7 +13,6 @@ floppy:x:94:
 scanner:x:96:adam
 power:x:98:
 nobody:x:65534:
-adm:x:999:daemon,adam
 wheel:x:998:adam
 utmp:x:997:
 audio:x:996:adam
@@ -32,10 +31,8 @@ video:x:985:sddm,adam
 users:x:984:
 systemd-journal:x:983:adam
 rfkill:x:982:adam
-bin:x:1:daemon
 daemon:x:2:bin
 http:x:33:
-dbus:x:81:adam
 systemd-coredump:x:981:
 systemd-network:x:980:
 systemd-oom:x:979:
