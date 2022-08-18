@@ -1,4 +1,4 @@
-root:$6$WZTYXKUl7.n3rdIR$Re4VdezVBRzbeWm/JpwOKoHzG3PJoyJzeSE4TfioyCtiLQNTNlE/yjlfAAXM6xKONrhP0t5hrC3scCtfLD4g.0:19156::::::
+root:$6$dOclyvrTsIsZi883$Py0ZvxbjFyFBnZ5YakoS4CmkdpOk6UECzidB8swqVVTBOuadG4YDAV.JFM.BTzhC9MEkG3aZGBUeccrEyVHyv0:19221::::::
 bin:!*:19156::::::
 daemon:!*:19156::::::
 mail:!*:19156::::::
@@ -25,5 +25,5 @@ systemd-journal-remote:!*:19156::::::
 systemd-oom:!*:19156::::::
 systemd-network:!*:19156::::::
 systemd-coredump:!*:19156::::::
-adam:$6$lxHEBJgCQUhiPp6.$JaOKIEd3s9kwJfAaL/wXCSKr.ZihbIGEQK/r0yQ9K.wGJF9qF3qQxydCubUiTwvRqnbzN2uVYPFi5zzb/JDSM1:19220::::::
 nobody:!*:19156::::::
+lxdm:x:19221:0:99999:7:::

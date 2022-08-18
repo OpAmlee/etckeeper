@@ -29,7 +29,7 @@ storage:!*::adam
 tty:!*::adam
 uucp:!*::adam
 video:!*::sddm,adam
-users:!*::
+users:!*::adam
 systemd-journal:!*::adam
 rfkill:!*::adam
 bin:!*::daemon

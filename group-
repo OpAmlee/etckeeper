@@ -28,7 +28,7 @@ storage:x:987:adam
 tty:x:5:adam
 uucp:x:986:adam
 video:x:985:sddm,adam
-users:x:984:
+users:x:984:adam
 systemd-journal:x:983:adam
 rfkill:x:982:adam
 daemon:x:2:bin
@@ -57,3 +57,4 @@ sddm:x:967:adam
 dhcpcd:x:966:
 incron:x:969:
 lxdm:x:965:
+trg:x:1001:

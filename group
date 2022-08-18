@@ -13,7 +13,7 @@ floppy:x:94:
 scanner:x:96:adam
 power:x:98:
 nobody:x:65534:
-wheel:x:998:adam
+wheel:x:998:adam,trg
 utmp:x:997:
 audio:x:996:adam
 disk:x:995:
@@ -57,3 +57,4 @@ sddm:x:967:adam
 dhcpcd:x:966:
 incron:x:969:
 lxdm:x:965:
+trg:x:1001:
