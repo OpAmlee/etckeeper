@@ -14,7 +14,7 @@ scanner:!*::adam
 power:!*::
 nobody:!*::
 adm:!*::daemon,adam
-wheel:!*::
+wheel:!*::adam
 utmp:!*::
 audio:!*::adam
 disk:!*::
@@ -57,6 +57,6 @@ cups:!*::
 geoclue:!*::
 vboxsf:!*::
 lightdm:!*::adam
-sddm:!*::
+sddm:!*::adam
 dhcpcd:!*::
 incron:!*::

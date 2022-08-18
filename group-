@@ -13,7 +13,6 @@ floppy:x:94:
 scanner:x:96:adam
 power:x:98:
 nobody:x:65534:
-adm:x:999:daemon,adam
 wheel:x:998:adam
 utmp:x:997:
 audio:x:996:adam
@@ -32,10 +31,8 @@ video:x:985:sddm,adam
 users:x:984:
 systemd-journal:x:983:adam
 rfkill:x:982:adam
-bin:x:1:daemon
 daemon:x:2:bin
 http:x:33:
-dbus:x:81:adam
 systemd-coredump:x:981:
 systemd-network:x:980:
 systemd-oom:x:979:
@@ -48,7 +45,6 @@ polkitd:x:102:
 rtkit:x:133:
 avahi:x:974:
 git:x:973:
-trg:x:1000:
 dnsmasq:x:972:
 i2c:x:971:
 usbmux:x:140:
@@ -57,8 +53,7 @@ cups:x:209:
 geoclue:x:970:
 vboxsf:x:109:
 lightdm:x:968:adam
-sddm:x:967:
+sddm:x:967:adam
 dhcpcd:x:966:
 incron:x:969:
 lxdm:x:965:
-adam:x:1001:
