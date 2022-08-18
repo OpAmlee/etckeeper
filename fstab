@@ -24,3 +24,4 @@ UUID=e5acc72c-f5a8-4cc6-8020-8bc454860f44	/var      	ext4      	rw,relatime	0 2
 #UUID=9776c38a-94b4-4ab7-a2b6-7bde95a903b3	/bu      	ext4      	rw,relatime	0 2
 
 tmpfs                                       /tmp        tmpfs       defaults,noatime,mode=1777 0 0
+
